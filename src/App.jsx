@@ -59,19 +59,7 @@ function App() {
   return (
     <div className={css.container}>
       <SearchBar onSearch={handleSearch} />
-      {loading && (
-        <div className={css.loaderWrapper}>
-          <Circles
-            height="80"
-            width="80"
-            color="#4fa94d"
-            ariaLabel="circles-loading"
-            wrapperStyle={{}}
-            wrapperClass=""
-            visible={true}
-          />
-        </div>
-      )}
+
       {error ? (
         <ErrorMessage message={error} />
       ) : (
@@ -83,6 +71,19 @@ function App() {
         </>
       )}
       <ImageModal image={selectedImage} onClose={handleCloseModal} />
+      {loading && (
+        <div className={css.load}>
+          <Circles
+            height="80"
+            width="80"
+            color="#4fa94d"
+            ariaLabel="circles-loading"
+            wrapperStyle={{}}
+            wrapperClass=""
+            visible={true}
+          />
+        </div>
+      )}
     </div>
   );
 }
