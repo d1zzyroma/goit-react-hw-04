@@ -1,21 +1,33 @@
-import { useEffect, useState } from "react";
-import css from "./App.module.css";
-import ImageGallery from "./components/ImageGallery/ImageGallery";
-import { searchImages } from "./services/api";
-import SearchBar from "./components/SearchBar/SearchBar";
+import React, { useEffect, useState } from 'react';
+import css from './App.module.css';
+import ImageGallery from './components/ImageGallery/ImageGallery';
+import { searchImages } from './services/api';
+import SearchBar from './components/SearchBar/SearchBar';
 import { Circles } from 'react-loader-spinner';
-import ErrorMessage from "./components/ErrorMessage/ErrorMessage";
-import LoadMoreBtn from "./components/LoadMoreBtn/LoadMoreBtn";
-import ImageModal from "./components/ImageModal/ImageModal";
+import ErrorMessage from './components/ErrorMessage/ErrorMessage';
+import LoadMoreBtn from './components/LoadMoreBtn/LoadMoreBtn';
+import ImageModal from './components/ImageModal/ImageModal';
 
+interface ImageData {
+  id: string;
+  urls: {
+    small: string;
+    full: string;
+  };
+  alt_description: string;
+}
 
-function App() {
-  const [data, setData] = useState([]);
-  const [query, setQuery] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [page, setPage] = useState(1);
-  const [selectedImage, setSelectedImage] = useState(null);
+interface ErrorState {
+  message: string;
+}
+
+const App: React.FC = () => {
+  const [data, setData] = useState<ImageData[]>([]);
+  const [query, setQuery] = useState<string>('');
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<ErrorState | null>(null);
+  const [page, setPage] = useState<number>(1);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
   useEffect(() => {
     const getImagesData = async () => {
@@ -27,7 +39,7 @@ function App() {
         console.log(response);
       } catch (error) {
         console.error(error);
-        setError('An error occurred while fetching images.');
+        setError({ message: 'An error occurred while fetching images.' });
       } finally {
         setLoading(false);
       }
@@ -38,7 +50,7 @@ function App() {
     }
   }, [query, page]);
 
-  const handleSearch = (searchQuery) => {
+  const handleSearch = (searchQuery: string) => {
     setQuery(searchQuery);
     setData([]);
     setPage(1);
@@ -48,7 +60,7 @@ function App() {
     setPage(prevPage => prevPage + 1);
   };
 
-  const handleImageClick = (image) => {
+  const handleImageClick = (image: string) => {
     setSelectedImage(image);
   };
 
@@ -61,7 +73,7 @@ function App() {
       <SearchBar onSearch={handleSearch} />
 
       {error ? (
-        <ErrorMessage message={error} />
+        <ErrorMessage message={error.message} />
       ) : (
         <>
           <ImageGallery data={data} onImageClick={handleImageClick} />
@@ -86,6 +98,6 @@ function App() {
       )}
     </div>
   );
-}
+};
 
 export default App;
